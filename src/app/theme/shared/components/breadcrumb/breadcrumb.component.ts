@@ -124,6 +124,6 @@ export class BreadcrumbComponent {
       }
     });
     this.navigationList = result;
-    this.titleService.setTitle(title + ' | Srikar BioTech');
+    this.titleService.setTitle(title + ' | Hair Fixing Zone');
   }
 }
