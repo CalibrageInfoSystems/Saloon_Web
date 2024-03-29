@@ -1,0 +1,25 @@
+// =======================================
+//   List of variables for Preset color
+// =======================================
+
+$preset-colors: (
+  // preset-1: (
+  //   body: #e3f2fd,
+  //   primary: #3cc65f,
+  //   primary-dark: #1c76da,
+  //   secondary: #f3a062,
+  //   secondary-dark: #542ca7
+  // )
+  preset-1: (
+    body: #e3f2fd,
+    primary: #3cc65f,
+    primary-dark: #3c9753,
+    secondary: #f3a062,
+    secondary-dark: #e78439
+  )
+);
+$dark-preset-colors: (
+  preset-1: (
+    body: #111
+  )
+);

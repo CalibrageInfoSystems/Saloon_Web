@@ -1,0 +1,25 @@
+<div class="m-header">
+  <!-- [ Header Topbar ] start -->
+  <a [routerLink]="['/default/']" class="b-brand d-flex align-items-end" *ngIf="this.companyId==1">
+    <!-- ========   change your logo hear   ============ -->
+    <img src="assets/images/logo.svg" alt="" class="logo logo-lg" width="80" />
+    <div><h4 class="mb-1 text-black logo-text">Srikar<br/>BioTech</h4></div>
+  </a>
+  <a [routerLink]="['/default/']" class="b-brand d-flex align-items-end" *ngIf="this.companyId==2">
+    <!-- ========   change your logo hear   ============ -->
+    <img src="assets/images/srikar-seeds.png" alt="" class="logo logo-lg" width="150" />
+    <!-- <div><h4 class="mb-1 text-black logo-text">Srikar<br/>Seeds</h4></div> -->
+  </a>
+  <!-- ======= Menu collapse Icon ===== -->
+  <div class="pc-h-item">
+    <a
+      href="javascript:"
+      class="pc-head-link head-link-secondary m-0 mobile-menu"
+      [ngClass]="{ on: navCollapsed }"
+      id="sidebar-hide mobile-collapse"
+      (click)="navCollapse()">
+      <i class="ti ti-menu-2"></i>
+    </a>
+  </div>
+</div>
+<!-- [ Header ] end -->

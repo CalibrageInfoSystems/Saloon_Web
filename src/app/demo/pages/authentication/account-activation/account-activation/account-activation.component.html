@@ -1,0 +1,73 @@
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="card mt-5">
+        <div class="card-body">
+          <a href="javascript:" class="d-flex justify-content-center mt-3">
+            <img src="assets/images/logo.svg"  width="150" class="pe-0" />
+          </a>
+          <div class="row">
+            <div class="d-flex justify-content-center">
+              <div class="auth-header">
+                <h2 class="text-secondary mt-5"><b>Account Activation</b></h2>
+                <!-- <p class="fs-4 mt-2">Enter your Password and Confirm Password</p> -->
+              </div>
+            </div>
+          </div>
+          <!-- <div class="saprator mt-3 text-white">
+            <span>or</span>
+          </div> -->
+          <!-- <h5 class="my-4 d-flex justify-content-center"> Enter your Email address or User Name </h5> -->
+          <!-- <div class="row"> -->
+            <form action="#" role="form" [formGroup]="postForm" class="php-email-form">
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" readonly id="floatingInput" placeholder="name@example.com" maxlength="50" formControlName="email"
+            [ngClass]="{ 'is-invalid': submitted  && formControls['email'].errors}">
+            <label for="floatingInput">Email Address / Username</label>
+            <div *ngIf="submitted && postForm.get('email').errors && postForm.get('email').errors?.['required']"
+                class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Email / Username is required">
+              </div>
+          </div>
+          <div class="form-floating mb-3">
+              <input [type]="showPassword?'text':'password'" maxlength="20" class="form-control" id="password"
+                formControlName="newPassword" placeholder="Enter New Password" [ngClass]="{'is-valid': submitted && postForm.get('newPassword').valid,
+            'is-invalid' : submitted && !postForm.get('newPassword').valid}" />
+              <label for="password">New Password</label>
+              <div
+                *ngIf="submitted && postForm.get('newPassword').errors && postForm.get('newPassword').errors?.['required']"
+                class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="New Password is required">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Password must contain at least: one uppercase letter,one lowercase letter, one digit, and any special character.Space not allowed"
+              *ngIf="submitted  && formControls['newPassword'].errors && formControls['newPassword'].errors['pattern']">
+            </div>
+              <span class="password-eye pwd-notshow pos-rit" *ngIf="showPassword" (click)="showPasswordHandler()"><i
+                  class="pi pi-eye" aria-hidden="true"></i></span>
+              <span class="password-eye pwd-show pos-rit" *ngIf="!showPassword" (click)="showPasswordHandler()"><i
+                  class="pi pi-eye-slash" aria-hidden="true"></i></span>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" maxlength="20" class="form-control" id="cPassword"
+                formControlName="confirmPassword" placeholder="Enter Confirm Password" [ngClass]="{'is-valid': submitted && postForm.get('confirmPassword').valid,
+            'is-invalid' : submitted && !postForm.get('confirmPassword').valid}" />
+              <label for="cPassword">Confirm Password</label>
+              <div
+                *ngIf="submitted && postForm.get('confirmPassword').errors && postForm.get('confirmPassword').errors?.['required']"
+                class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Confirm Password is required">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Password and Confirm Password do not match"
+              *ngIf="submitted  && formControls['confirmPassword'].errors && formControls['confirmPassword'].errors['notEqual']">
+            </div>
+            </div>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-secondary p-2" (click)="onSubmit()">Submit</button>
+          </div>
+          <hr />
+          <h5 class="d-flex justify-content-center">
+            <a [routerLink]="['/auth/login']"> You want to go back to SignIn? </a>
+          </h5>
+            </form>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>

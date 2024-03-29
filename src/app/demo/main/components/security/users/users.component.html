@@ -1,0 +1,266 @@
+<div class="col-xl-12 col-12" *ngIf="!formShow">
+  <div class="card">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+      <h4 class="text-secondary mb-0">Users List</h4>
+    </div>
+    <div class="card-body">
+      <p-table   #dtUsers styleClass="p-datatable-sm" [value]="userInfoList" [columns]="tHeaders" dataKey="name" [tableStyle]="{'min-width': '60rem'}" [rows]="10"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 25, 50]" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="globalFilterFields">
+        <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-between">
+              <!-- <button pButton label="Clear" class="p-button-outlined p-button-sm"  icon="pi pi-filter-slash"
+                  (click)="clear(dtUsers)" id="btn-clear"></button> -->
+              <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" #filter (input)="onGlobalFilter(dtUsers, $event)" maxlength="30"
+                      placeholder="Search Keyword" class="p-inputtext-sm" id="search-input" />
+              </span>
+              <button type="button" class="btn btn-secondary" (click)="onAddClick()"><i class="ti ti-users-plus"></i> Add</button>
+          </div>
+      </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of tHeaders" [pSortableColumn]="col.key" [ngClass]="{'text-center': col?.key=='isActive'}">
+              <div class="d-flex align-items-center justify-content-start">
+                {{col.header}}
+                <p-sortIcon [field]="col.key"></p-sortIcon>
+                <p-columnFilter type="text" [field]="col.key" display="menu"></p-columnFilter>
+              </div>
+            </th>
+            <th style="width: 150px !important;" class="text-center">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-items>
+          <tr>
+            <td [ngClass]="{'text-center': col?.key=='isActive'}" *ngFor="let col of tHeaders">
+
+              <span *ngIf="col?.key !== 'isActive'"> {{ items[col?.key] }}</span>
+              <span *ngIf="col?.key == 'isActive'">
+                <!-- <i class="ti"  [title]="items?.isActive ? commonEnum.ACTIVE : commonEnum.INACTIVE"
+                        [ngClass]="{'text-succes ti-circle-check': items?.isActive, 'text-danger ti-xbox-x': !items?.isActive}"></i> -->
+                <i class="pi" [title]="items?.isActive ? commonEnum.ACTIVE : commonEnum.INACTIVE"
+                  [ngClass]="{'text-primary pi-check-circle': items?.isActive, 'text-danger pi-times-circle': !items?.isActive}"></i>
+              </span>
+
+
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-info me-1" (click)="onEditUser(items)" title="Edit">
+                <i class="ti ti-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger"  [disabled]="!items?.isActive"  (click)="onDelete(items)" title="Delete">
+                <i class="ti ti-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="tHeaders?.length+1" class="text-center">No Data Found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<div class="card" *ngIf="formShow">
+  <div class="card-header">
+    <div class="main-title">
+      <h4 class="text-secondary mb-0">{{buttonName==commonEnum.SAVE ? commonEnum.CREATE : commonEnum.UPDATE}} User</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="white_card_body">
+      <form action="#" role="form" [formGroup]="postForm" class="php-email-form">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">User Name <span class="text-danger">*</span></label>
+              <input class="form-control" AlphabetsNumaricsDirective type="text" placeholder="Enter User Name" maxlength="50" formControlName="userName"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['userName'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="User Name is required"
+                *ngIf="submitted  && formControls['userName'].errors && formControls['userName'].errors['required']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">Slp. Code <span class="text-danger">*</span></label>
+              <input class="form-control" AlphabetsNumaricsDirective type="text" placeholder="Enter Slp. Code" maxlength="30" formControlName="slpCode"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['slpCode'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Slp. Code is required"
+                *ngIf="submitted  && formControls['slpCode'].errors && formControls['slpCode'].errors['required']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">First Name <span class="text-danger">*</span></label>
+              <input class="form-control" alphaOnly type="text" placeholder="Enter First Name" maxlength="50" formControlName="firstName"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['firstName'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="First Name is required"
+                *ngIf="submitted  && formControls['firstName'].errors && formControls['firstName'].errors['required']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">Last Name <span class="text-danger">*</span></label>
+              <input class="form-control" alphaOnly  type="text" placeholder="Enter Last Name" maxlength="50" formControlName="lastName"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['lastName'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Last Name is required"
+                *ngIf="submitted  && formControls['lastName'].errors && formControls['lastName'].errors['required']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">Email <span class="text-danger">*</span></label>
+              <input class="form-control" type="text" placeholder="Enter Email" maxlength="50" formControlName="email"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['email'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Email is required"
+                *ngIf="submitted  && formControls['email'].errors && formControls['email'].errors['required']">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Email is not valid"
+              *ngIf="submitted  && formControls['email'].errors && formControls['email'].errors['pattern']">
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">Mobile Number <span class="text-danger">*</span></label>
+              <input class="form-control" numberOnly placeholder="Enter Mobile Number"  formControlName="phoneNumber" maxlength="15"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['phoneNumber'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Mobile Number is required"
+                *ngIf="submitted  && formControls['phoneNumber'].errors && formControls['phoneNumber'].errors['required']">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Mobile Number is not valid"
+              *ngIf="submitted  && formControls['phoneNumber'].errors && formControls['phoneNumber'].errors['pattern']">
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label">Alternate Mobile Number</label>
+              <input class="form-control"  numberOnly placeholder="Enter Alternative Mobile Number" formControlName="alterNateMobileNumber" maxlength="15"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['alterNateMobileNumber'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Alternate Mobile Number is not valid"
+                *ngIf="submitted  && formControls['alterNateMobileNumber'].errors && formControls['alterNateMobileNumber'].errors['pattern']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" *ngIf="buttonName === commonEnum.SAVE">
+            <div class="form-group">
+              <label class="form-control-label">New Password <span class="text-danger">*</span></label>
+              <!-- <input class="form-control" type="password" placeholder="Enter New Password" formControlName="newPassword"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['newPassword'].errors}"> -->
+
+              <p-password  [maxLength]="20" formControlName="newPassword" placeholder="Enter New Password" [toggleMask]="true" [ngClass]="{ 'ng-invalid ng-dirty': submitted  && formControls['newPassword'].errors}"></p-password>
+
+
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="New Password is required"
+                *ngIf="submitted  && formControls['newPassword'].errors && formControls['newPassword'].errors['required']">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Password must contain at least: one uppercase letter,one lowercase letter, one digit, and any special character.Space not allowed"
+                *ngIf="submitted  && formControls['newPassword'].errors && formControls['newPassword'].errors['pattern']">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" *ngIf="buttonName === commonEnum.SAVE">
+            <div class="form-group">
+              <label class="form-control-label">Confirm Password<span class="text-danger">*</span></label>
+              <input class="form-control" type="password" placeholder="Enter Confirm Password"  formControlName="confirmPassword" maxlength="20"
+              [ngClass]="{ 'is-invalid': submitted  && formControls['confirmPassword'].errors}">
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Confirm Password is required"
+                *ngIf="submitted  && formControls['confirmPassword'].errors && formControls['confirmPassword'].errors['required']">
+              </div>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Password and Confirm Password do not match"
+              *ngIf="submitted  && formControls['confirmPassword'].errors && formControls['confirmPassword'].errors['notEqual']">
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label w-100">Roles <span class="text-danger">*</span></label>
+              <p-autoComplete class="p-inputtext-sm" placeholder="Search Role" [showEmptyMessage]="true" [(ngModel)]="selectedRole"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="clearRoleFilter($event)"
+              [suggestions]="filteredRoles" (completeMethod)="filterRole($event)" field="name" [minLength]="2"
+              (onSelect)="onRoleChange($event)"
+              [ngClass]="{ 'ng-invalid ng-dirty': submitted && formControls['roles'].errors }">
+            </p-autoComplete>
+            <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Roles is required"
+            *ngIf="submitted  && formControls['roles'].errors && formControls['roles'].errors['required']">
+          </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-control-label w-100">Reporting Manager </label>
+              <p-autoComplete [showEmptyMessage]="true" placeholder="Search Name" [(ngModel)]="selectedManager"
+                      [ngModelOptions]="{standalone: true}" (ngModelChange)="clearManagerFilter($event)"
+                      [suggestions]="filteredManagers" (completeMethod)="filterManager($event)"
+                      (onSelect)="onSelectManager($event)" field="fullName" [minLength]="2"
+                      [ngClass]="{ 'ng-invalid ng-dirty': submitted && formControls['reportingManager'].errors }">
+                    </p-autoComplete>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+          <label class="form-label">Company<span class="text-danger"> *</span></label>
+          <p-multiSelect [options]="companyList" optionLabel="companyName" [filter]="true" appendTo="body"
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted  && formControls['companyIds'].errors}"
+          (onChange)="changeUser($event.value)"  [(ngModel)]="companyMultiData" [ngModelOptions]="{standalone: true}" filterBy="companyName"
+            placeholder="Select Company">
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value" *ngIf="companyMultiData">
+                <div>{{companyMultiData?.companyName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-items pTemplate="item">
+              <div class="country-item">
+                <div>{{items?.companyName}}</div>
+              </div>
+            </ng-template>
+          </p-multiSelect>
+          <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg"  placement="start" ngbTooltip="Company is required"
+          *ngIf="submitted  && formControls['companyIds'].errors && formControls['companyIds'].errors['required']">
+        </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-4">
+            <label class="form-control-label invisible w-100 mb-0">Hidden</label>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" formControlName="isActive" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Active
+              </label>
+            </div>
+          </div> -->
+          <div class="col-md-4">
+          <div class="form-group">
+            <label for="statusRadio" class="form-label d-block">Active</label>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="isActive" id="statusActive" formControlName="isActive" autocomplete="off" [value]="true">
+              <label class="btn btn-outline-success" for="statusActive">Active</label>
+    
+              <input type="radio" class="btn-check" name="isActive" id="statusInactive" formControlName="isActive" autocomplete="off" [value]="false">
+              <label class="btn btn-outline-danger" for="statusInactive">In Active</label>
+            </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-md btn-danger btn-active-light-primary me-2" (click)="onAddCancel()"><i class="ti ti-x"></i> Cancel</button>
+              <button type="submit"  *ngIf="buttonName==commonEnum.SAVE && !processing"  class="btn btn-md btn-primary px-5"  (click)="onSubmit(commonEnum.SAVE)"><i class="ti ti-check"></i>{{buttonName}}</button>
+              <button type="submit" class="btn btn-md btn-primary px-5" *ngIf="processing" disabled><i class="pi pi-spin pi-spinner" style="font-size: 0.9rem"></i>
+              {{commonEnum.PROCESSING}}</button>
+              <button type="submit"  *ngIf="buttonName==commonEnum.UPDATE && !processing" class="btn btn-md btn-primary px-5" (click)="onSubmit(commonEnum.UPDATE)"><i class="ti ti-pencil"></i>{{buttonName}}</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

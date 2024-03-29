@@ -1,0 +1,102 @@
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <!-- <form class="pt-3" [formGroup]="loginForm" autocomplete="off">
+      <div class="btn-group1" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="companyId" formControlName="companyId" id="company1" [value]="1" autocomplete="off" checked>
+        <label class="btn btn-outline-secondary me-4" for="company1">
+          <span class="d-flex justify-content-center align-items-center">
+          <img src="assets/images/logo.svg" width="60" class="pe-2" /><span>Srikar Biotech</span></span>
+        </label>
+
+        <input type="radio" class="btn-check" name="companyId" formControlName="companyId" [value]="2" id="company2" autocomplete="off">
+        <label class="btn btn-outline-success" for="company2">
+          <span class="d-flex justify-content-center align-items-center">
+            <img src="assets/images/srikar-seeds.png" width="80" class="pe-2" /><span>Srikar Seeds</span></span></label>
+      </div>
+    </form> -->
+    <!-- {{this.loginForm.value | json}} -->
+      <div class="card my-3">
+        <div class="card-body">
+          <!-- <a routerLink="/" class="d-flex justify-content-center">
+            <img *ngIf="this.loginForm.value.companyId==1" src="assets/images/logo.svg" width="150" class="pe-0" />
+            <img *ngIf="this.loginForm.value.companyId==2" src="assets/images/srikar-seeds.png" width="150" class="pe-0" />
+          </a> -->
+          <div class="d-flex justify-content-center">
+          <form class="pt-3" [formGroup]="loginForm" autocomplete="off">
+            <div class="btn-group1" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="companyId" formControlName="companyId" id="company1" [value]="1" autocomplete="off" checked>
+              <label class="btn btn-outline-secondary me-4" for="company1">
+                <span class="d-flex justify-content-center align-items-center">
+                <img src="assets/images/logo.svg" width="60" class="pe-2" /><span>Srikar Biotech</span></span>
+              </label>
+              <input type="radio" class="btn-check" name="companyId" formControlName="companyId" [value]="2" id="company2" autocomplete="off">
+              <label class="btn btn-outline-success" for="company2">
+                <span class="d-flex justify-content-center align-items-center">
+                  <img src="assets/images/srikar-seeds.png" width="100" class="pe-2" /><span>Srikar Seeds</span></span></label>
+            </div>
+          </form>
+          </div>
+          <div class="row">
+            <div class="d-flex justify-content-center">
+              <div class="auth-header">
+                <h2 class="text-secondary mt-5"><b>Hi, Welcome Back</b></h2>
+                <p class="fs-4 mt-2">Enter your credentials to continue</p>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="d-grid">
+            <button type="button" class="btn mt-2 btn-light-primary bg-light text-muted">
+              <img src="assets/images/authentication/google-icon.svg" />Sign In With Google
+            </button>
+          </div> -->
+          <!-- <div class="saprator mt-3 text-white">
+            <span>or</span>
+          </div> -->
+          <!-- <h5 class="my-4 d-flex justify-content-center"> Sign in with Email/Username </h5> -->
+          <form class="pt-3" [formGroup]="loginForm" autocomplete="off">
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" autofocus formControlName="email" maxlength="50" autocomplete="off"
+                placeholder="Enter Email address / Username" [ngClass]="{'is-valid': submitted && loginForm.get('email').valid,
+                        'is-invalid' : submitted && !loginForm.get('email').valid}" />
+              <label for="floatingInput">Email address / Username</label>
+              <div *ngIf="submitted && loginForm.get('email').errors && loginForm.get('email').errors?.['required']"
+                class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Email/Username is required">
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input [type]="showPassword?'text':'password'" maxlength="20" class="form-control" id="password"
+                formControlName="password" placeholder="Enter Password" [ngClass]="{'is-valid': submitted && loginForm.get('password').valid,
+            'is-invalid' : submitted && !loginForm.get('password').valid}" />
+              <label for="password">Password</label>
+              <div
+                *ngIf="submitted && loginForm.get('password').errors && loginForm.get('password').errors?.['required']"
+                class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Password is required">
+              </div>
+              <span class="password-eye pwd-notshow pos-rit" *ngIf="showPassword" (click)="showPasswordHandler()"><i
+                  class="pi pi-eye" aria-hidden="true"></i></span>
+              <span class="password-eye pwd-show pos-rit" *ngIf="!showPassword" (click)="showPasswordHandler()"><i
+                  class="pi pi-eye-slash" aria-hidden="true"></i></span>
+            </div>
+            <div class="d-flex mt-1 justify-content-between">
+              <div class="form-check">
+                <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+                <label class="form-check-label text-muted" for="customCheckc1">Remember me</label>
+              </div>
+              <h5 class="text-secondary">
+                <a [routerLink]="['/auth/forgot-password']">Forgot Password?</a>
+              </h5>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-secondary" (click)="logIn()">Sign In</button>
+            </div>
+            <!-- <hr />
+            <h5 class="d-flex justify-content-center">
+              <a [routerLink]="['/auth/register']">Don't have an account?</a>
+            </h5> -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

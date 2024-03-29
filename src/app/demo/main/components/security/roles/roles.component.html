@@ -1,0 +1,646 @@
+<div class="card" *ngIf="!showForm">
+  <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+    <h4 class="text-secondary mb-0">Roles List</h4>  </div>
+  <div class="card-body">
+<!-- {{rolesInfoList |json}} -->
+
+    <p-table #dtroles styleClass="p-datatable-sm" [value]="rolesInfoList" [columns]="tHeaders" dataKey="id" expandableRows="true"  rowExpandMode="single" 
+    [columns]="tHeaders" dataKey="name" [tableStyle]="{'min-width': '60rem'}" [rows]="10"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 25, 50]" [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="globalFilterFields">
+    <ng-template pTemplate="caption">
+      <div class="d-flex justify-content-between">
+          <!-- <button pButton label="Clear" class="p-button-outlined p-button-sm"  icon="pi pi-filter-slash"
+              (click)="clear(dtroles)" id="btn-clear"></button> -->
+          <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" #filter (input)="onGlobalFilter(dtroles, $event)" maxlength="30"
+                  placeholder="Search Keyword" class="p-inputtext-sm" id="search-input" />
+          </span>
+          <button type="button" class="btn btn-secondary" (click)="onAddClick()"><i class="ti ti-users-plus"></i> Add</button>
+      </div>
+  </ng-template>
+      <!-- <ng-template pTemplate="caption"> Row Expandable Grid</ng-template> -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem !important;"></th>
+          <th *ngFor="let col of tHeaders" [pSortableColumn]="col.key" [ngClass]="{'text-center': col.key=='isActive'}">
+            {{col.header}}
+            <p-sortIcon [field]="col.key"></p-sortIcon>
+            <p-columnFilter type="text" [field]="col.key" display="menu"></p-columnFilter>
+          </th>
+          <th style="width: 150px !important;" class="text-center">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-items let-expanded="expanded">
+        <tr>
+          <td>
+         
+            <button type="button" pButton pRipple [pRowToggler]="items"  (click)="getRowActivityRightsByRole(items.id)"
+              class="p-button-text p-button-rounded p-button-plain"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td>
+          <td [ngClass]="{'text-center': col?.key=='isActive'}" *ngFor="let col of tHeaders">
+            <span *ngIf="col?.key !== 'isActive'"> {{ items[col?.key] }}</span>
+            <span *ngIf="col?.key == 'isActive'">
+              <!-- <i class="ti"  [title]="items?.isActive ? commonEnum.ACTIVE : commonEnum.INACTIVE"
+                      [ngClass]="{'text-succes ti-circle-check': items?.isActive, 'text-danger ti-xbox-x': !items?.isActive}"></i> -->
+              <i class="pi" [title]="items?.isActive ? commonEnum.ACTIVE : commonEnum.INACTIVE"
+                [ngClass]="{'text-primary pi-check-circle': items?.isActive, 'text-danger pi-times-circle': !items?.isActive}"></i>
+            </span>
+
+          </td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-info me-1" (click)="onEditRole(items)" title="Edit">
+              <i class="ti ti-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger"  [disabled]="!items?.isActive" (click)="onDelete(items)" title="Delete">
+              <i class="ti ti-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-product>
+        <tr>
+          <td  [attr.colspan]="tHeaders.length + 2">
+            <div class="p-3">
+              <p-table [value]="rolePermisonsList" styleClass="p-datatable-sm" >
+                <ng-template pTemplate="header">
+        <tr>
+          <th [pSortableColumn]="'groupName'">  Group Name<p-sortIcon [field]="'groupName'"></p-sortIcon> </th>
+          <th [pSortableColumn]="'desc'"> Name  <p-sortIcon [field]="'desc'"></p-sortIcon> </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowdata>
+        <tr>
+          <td>{{rowdata?.groupName}}</td>
+          <td>{{rowdata?.desc}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr *ngIf="rolePermisonsList.length == 0">
+          <td colspan="7" class="ui-datatable-emptymessage text-center">
+            No data found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  </td>
+  </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="tHeaders?.length+1" class="text-center">No Data Found.</td>
+    </tr>
+  </ng-template>
+  </p-table>
+</div>
+</div>
+<div class="card" *ngIf="showForm">
+  <div class="card-header">
+    <div class="main-title">
+      <h4 class="text-secondary mb-0">{{buttonName==commonEnum.SAVE ? commonEnum.CREATE : commonEnum.UPDATE}} Role</h4>
+
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="white_card_body">
+      <form action="#" role="form" [formGroup]="roleForm" class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div class="form-group">
+            <label class="form-control-label"> Name <span class="text-danger">*</span></label>
+            <input class="form-control"  type="text" placeholder="Enter Name" maxlength="50" formControlName="name"
+            [ngClass]="{ 'is-invalid': submitted  && formControls['name'].errors}">
+            <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Name is required"
+              *ngIf="submitted  && formControls['name'].errors && formControls['name'].errors['required']">
+            </div>
+            <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Name Only - and () special characters are allowed"
+            *ngIf="submitted  && formControls['name'].errors && formControls['name'].errors['pattern']">
+          </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div class="form-group">
+            <label class="form-control-label w-100">Reporting Role </label>
+            <select class="form-control" formControlName="parentRoleId" data-toggle="select"
+            [ngClass]="{ 'is-invalid': submitted && roleForm.get('parentRoleId').errors}">
+            <option [value]="null" selected>-- Select --</option>
+            <option [value]="role?.id" *ngFor="let role of parentRoleList">
+              {{role?.name}}</option>
+          </select>
+          <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Reporting Role is required"
+              *ngIf="submitted  && formControls['parentRoleId'].errors && formControls['parentRoleId'].errors['required']">
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div class="form-group">
+            <label class="form-control-label">Description </label>
+            <textarea type="test" #count maxlength="250" class="form-control" formControlName="description" 
+              placeholder="Enter Description"></textarea>
+              <div  class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Description is required"
+              *ngIf="submitted  && formControls['description'].errors && formControls['description'].errors['required']">
+            </div>
+            <small class="dis-inline text-muted lineH-1 float-end mb-0">
+              {{count.value.length}}/250
+            </small>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-12 align-self-center">
+          <!-- <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="flexCheckDefault"  formControlName="isActive" >
+            <label class="form-check-label" for="flexCheckDefault">
+              Active
+            </label>
+          </div> -->
+          <div class="form-group">
+            <label for="statusRadio" class="form-label d-block">Active</label>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="isActive" id="statusActive" formControlName="isActive" autocomplete="off" [value]="true">
+              <label class="btn btn-outline-success" for="statusActive">Active</label>
+    
+              <input type="radio" class="btn-check" name="isActive" id="statusInactive" formControlName="isActive" autocomplete="off" [value]="false">
+              <label class="btn btn-outline-danger" for="statusInactive">In Active</label>
+            </div>
+            </div>
+        </div>
+        <!-- {{activityRights |json}} [ngClass]="{'show':permissionGroup.value[i].isSelect}"-->
+
+        <div class="accordion col-xl-12 col-md-12 col-12 mt-3" id="accordionDues">
+          <ng-template ngFor let-permissionGroup [ngForOf]="activityRights | groupBy: 'moduleName'" let-i="index">
+            <div id="display{{i}}" class="card">
+              <div class="card-header" id="heading{{i}}">
+                <div [style]="{cursor: 'pointer'}" data-bs-toggle="collapse" attr.data-bs-target="#target{{i}}"
+                  attr.aria-controls="heading{{i}}">
+                  <h4 class="mb-0 text-secondary"> {{permissionGroup.key}}</h4>
+                </div>
+              </div>
+        
+              <div class="card-body collapse show"  id="target{{i}}"
+                attr.aria-labelledby="heading{{i}}">
+        
+                <div class="row">
+                  <div class="col-xl-6 col-md-6 col-12"
+                    *ngFor="let mgroup of permissionGroup.value  | groupBy: 'groupName';let k = index">
+                    <div class="card mb-0">
+                      <div class="card-header">
+                        <h4 class="mb-0">{{mgroup.key}}</h4>
+                        <div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="usersSelectAll-{{mgroup.key}}"
+                              (change)="onToggleSelectAll($event,mgroup.value)" [checked]="mgroup.value[0]?.isSelectAll">
+                            <label class="form-check-label" for="usersSelectAll-{{mgroup.key}}">
+                              Select All
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+        
+                      <div class="card-body" id="target{{permissionGroup.key}}{{k}}" attr.aria-labelledby="newheading{{permissionGroup.key}}{{k}}">
+                    
+                        <div class="form-check"  *ngFor="let permission of mgroup.value let p = index">
+                          <input class="form-check-input" type="checkbox" value="" id="custom-{{permission.name}}"
+                            [ngClass]="{ 'is-invalid': submitted && permissions.length == 0}"
+                            (change)="onToggleChange($event,permission,mgroup.value, p)" [checked]="permission?.isEnabled">
+                          <label class="form-check-label" for="custom-{{permission.name}}">
+                            {{permission.desc}}
+                          </label>
+                       
+                        </div>
+                      </div>
+        
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+
+
+        <!-- <div class="col-xl-12 col-md-12 col-12 mt-3">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="mb-0 text-secondary">Security</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-xl-6 col-md-6 col-12">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <h4 class="mb-0">Users</h4>
+                      <div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="usersSelectAll">
+                          <label class="form-check-label" for="usersSelectAll">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="usersCanView" checked>
+                        <label class="form-check-label" for="usersCanView">
+                          View Users
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="usersCanManage" checked>
+                        <label class="form-check-label" for="usersCanManage">
+                          Manage Users
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="usersCanDelete" checked>
+                        <label class="form-check-label" for="usersCanDelete">
+                          Delete Users
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6 col-12">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <h4 class="mb-0">Roles</h4>
+                      <div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="selectAllRoles">
+                          <label class="form-check-label" for="selectAllRoles">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canViewRoles" checked>
+                        <label class="form-check-label" for="canViewRoles">
+                          View Roles
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canManageRoles" checked>
+                        <label class="form-check-label" for="canManageRoles">
+                          Manage Roles
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canDeleteRoles" checked>
+                        <label class="form-check-label" for="canDeleteRoles">
+                          Delete Roles
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h4 class="mb-0 text-secondary">Orders</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-xl-6 col-md-6 col-12">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <h4 class="mb-0">Create Order</h4>
+                      <div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="selectAllCreateOrder">
+                          <label class="form-check-label" for="selectAllCreateOrder">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canViewCreateOrder" checked>
+                        <label class="form-check-label" for="canViewCreateOrder">
+                          View Create Order
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canManageCreateOrder" checked>
+                        <label class="form-check-label" for="canManageCreateOrder">
+                          Manage Create Order
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canDeleteCreateOrder" checked>
+                        <label class="form-check-label" for="canDeleteCreateOrder">
+                          Delete Create Order
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6 col-12">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <h4 class="mb-0">Orders</h4>
+                      <div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="selectAllOrders">
+                          <label class="form-check-label" for="selectAllOrders">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canViewOrders" checked>
+                        <label class="form-check-label" for="canViewOrders">
+                          View Orders
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canManageOrders" checked>
+                        <label class="form-check-label" for="canManageOrders">
+                          Manage Orders
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canCreateOrders" checked>
+                        <label class="form-check-label" for="canCreateOrders">
+                          Create Orders
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h4 class="mb-0 text-secondary">Collection</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-xl-6 col-md-6 col-12">
+                  <div class="card mb-0">
+                    <div class="card-header">
+                      <h4 class="mb-0">Create Collection</h4>
+                      <div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="selectAllCreateCollection">
+                          <label class="form-check-label" for="selectAllCreateCollection">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canViewCreateCollection" checked>
+                        <label class="form-check-label" for="canViewCreateCollection">
+                          View Create Collection
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canManageCreateCollection" checked>
+                        <label class="form-check-label" for="canManageCreateCollection">
+                          Manage Create Collection
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="canDeleteCreateCollection" checked>
+                        <label class="form-check-label" for="canDeleteCreateCollection">
+                          Delete Create Collection
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+ -->
+
+
+
+        <!-- <div class="col-xl-12 col-12">
+          <div class="card p-0 mb-0">
+            <div class="card-header border-width-2">
+              <h4 class="mb-0">Role list</h4>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <td>Module</td>
+                    <th class="text-center" style="width: 150px;">View</th>
+                    <th class="text-center" style="width: 150px;">Manage</th>
+                    <th class="text-center" style="width: 150px;">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-lite-orange">
+                    <th colspan="2"><i class="ti ti-shield-lock me-2"></i> Security</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                  </tr>
+                  <tr>
+                    <td>Users</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="usersView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="usersManage" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="usersDelete" value="" aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Roles</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="rolesView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="rolesManage" value="" aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="rolesDelete" value="" aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr class="bg-lite-orange">
+                    <th colspan="2"><i class="ti ti-layers-subtract me-2"></i> Masters</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                  </tr>
+                  <tr>
+                    <td>Country</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="countryView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="countryManage" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="countryDelete" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>State</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="stateView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="stateManage" value="" aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="stateDelete" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>City</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="cityView" value="" aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="cityManage" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="cityDelete" value="" aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr class="bg-lite-orange">
+                    <th colspan="2"><i class="ti ti-shopping-cart me-2"></i> Orders</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                  </tr>
+                  <tr>
+                    <td>All Orders</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="allOrdersView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="allOrdersManage" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="allOrdersDelete" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Delivery Status</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="deliveryView" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="deliveryManage" value="" aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked id="deliveryDelete" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cancellation</td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="cancellationView" value="" aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="cancellationManage" value=""
+                          aria-label="...">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div>
+                        <input class="form-check-input" type="checkbox" id="cancellationDelete" value="" aria-label="...">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-lg-12">
+          <div class="d-flex justify-content-end mt-3">
+            <button type="button" class="btn btn-md btn-danger btn-active-light-primary me-2" (click)="onAddCancel()"><i
+                class="ti ti-x"></i> Cancel</button>
+            <button type="submit" class="btn btn-md btn-primary px-5"  *ngIf="buttonName==commonEnum.SAVE && !processing"  (click)="onSubmit(commonEnum.SAVE)"><i class="ti ti-check"></i>{{buttonName}}</button>
+            <button type="submit" class="btn btn-md btn-primary px-5" *ngIf="processing" disabled><i class="pi pi-spin pi-spinner" style="font-size: 0.9rem"></i>
+              {{commonEnum.PROCESSING}}</button>
+              <button type="submit"  *ngIf="buttonName==commonEnum.UPDATE && !processing" class="btn btn-md btn-primary px-5" (click)="onSubmit(commonEnum.UPDATE)"><i class="ti ti-pencil"></i>{{buttonName}}</button>
+           
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

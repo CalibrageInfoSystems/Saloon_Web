@@ -1,0 +1,20 @@
+<!-- [ Sidebar Menu ] start -->
+<nav>
+  <div class="navbar-wrapper">
+    <div class="m-header justify-content-between">
+      <!-- [ Header Topbar ] start -->
+      <a [routerLink]="['/default/']" class="b-brand">
+        <!-- ========  your logo hear   ============ -->
+        <img src="assets/images/logo.svg" class="logo logo-lg" width="100" />
+      </a>
+      <a href="javascript:"
+        class="pc-head-link head-link-secondary ms-0 mobile-menu"
+        id="mobile-collapse mobile-collapse1"
+        (click)="this.NavCollapsedMob.emit()">
+        <i class="ti ti-menu-2"></i>
+      </a>
+    </div>
+    <app-nav-content (NavCollapsedMob)="navCollapseMob()" class="scroll-div w-100"></app-nav-content>
+  </div>
+</nav>
+<!-- [ Sidebar Menu ] end -->

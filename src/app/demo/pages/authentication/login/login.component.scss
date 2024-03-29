@@ -1,0 +1,105 @@
+.password-eye {
+    position: absolute;
+    float: right;
+    z-index: 1;
+    right: 2%;
+    left: auto;
+    top: 12px;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 40px;
+  }
+
+  .form-control.is-invalid~ .pos-rit{
+    right: 8%;
+    left: auto;
+  }
+
+  .form-control.is-valid~ .pos-rit{
+    right: 8%;
+    left: auto;
+  }
+
+// New Validation Tooltip
+.error-icon-hover {
+  position: absolute;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  bottom: 18px;
+  right: 8px;
+}
+.form-control~ .error-icon-hover {
+  position: absolute;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  bottom: 18px;
+  right: 8px;
+}
+.btn-check:checked + .btn.btn-outline-secondary, :not(.btn-check) + .btn.btn-outline-secondary:active, .btn.btn-outline-secondary:first-child:active, .btn.btn-outline-secondary.active, .btn.btn-outline-secondary.show {
+  color: #e78337;
+  background-color: #ffffff;
+  border-color: #e78337;
+  filter: grayscale(0%);
+}
+.btn-check:checked + .btn.btn-outline-success, :not(.btn-check) + .btn.btn-outline-success:active, .btn.btn-outline-success:first-child:active, .btn.btn-outline-success.active, .btn.btn-outline-success.show {
+  color: #198754;
+  background-color: #ffffff;
+  border-color: #198754;
+  filter: grayscale(0%);
+}
+.btn-outline-secondary {
+  --bs-btn-color: #a9a9a9;
+    --bs-btn-border-color: #c4c4c4;
+  --bs-btn-hover-color: inherit;
+  --bs-btn-hover-bg: none;
+  --bs-btn-hover-border-color: none;
+  --bs-btn-focus-shadow-rgb: 102, 16, 242;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #c4c4c4;
+  --bs-btn-active-border-color: #c4c4c4;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #c4c4c4;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #c4c4c4;
+  --bs-gradient: none;
+  border-width: 2px;
+  background-color: #e5e5e5;
+  box-shadow: 0px 4px 12px 2px rgba(71, 71, 71, 0.1);
+  filter: grayscale(60%);
+}
+.btn-check:not(:checked) + .btn.btn-outline-secondary:hover {
+  color: #a9a9a9;
+  background-color: #e5e5e5;
+  --bs-btn-border-color: #c4c4c4;
+  filter: grayscale(60%);
+}
+.btn-outline-success{
+  --bs-btn-color: #a9a9a9;
+  --bs-btn-border-color: #c4c4c4;
+--bs-btn-hover-color: inherit;
+--bs-btn-hover-bg: none;
+--bs-btn-hover-border-color: none;
+--bs-btn-focus-shadow-rgb: 102, 16, 242;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #c4c4c4;
+--bs-btn-active-border-color: #c4c4c4;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #c4c4c4;
+--bs-btn-disabled-bg: transparent;
+--bs-btn-disabled-border-color: #c4c4c4;
+--bs-gradient: none;
+border-width: 2px;
+background-color: #e5e5e5;
+box-shadow: 0px 4px 12px 2px rgba(71, 71, 71, 0.1);
+filter: grayscale(60%);
+}
+.btn-check:not(:checked) + .btn.btn-outline-success:hover {
+  color: #a9a9a9;
+  background-color: #e5e5e5;
+  --bs-btn-border-color: #c4c4c4;
+  filter: grayscale(60%);
+}
