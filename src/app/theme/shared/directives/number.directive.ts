@@ -5,35 +5,36 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
     standalone: true
 })
 export class NumberOnlyDirective {
-    // Allow decimal numbers and negative values
-    //  private regex: RegExp = new RegExp(/^-?[0-9]+(\.[0-9]*){0,1}$/g);
-    private regex: RegExp = new RegExp(/^-?[0-9]+$/g);
-    // Allow key codes for special events. Reflect :
-    // Backspace, tab, end, home
-    private specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight', 'Delete'];
 
-    constructor(private el: ElementRef) {
+  private regex: RegExp = new RegExp(/^[0-9-]*$/);
+
+  private specialKeys: Array<string> = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'End', 'Home'];
+  constructor(private el: ElementRef) {
+
+  }
+  /* Key board action */
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    // Allow Backspace, tab, end, and home keys
+    if (this.specialKeys.indexOf(event.key) !== -1) {
+      return;
     }
-    @HostListener('keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent) {
-        // Allow Backspace, tab, end, and home keys
-        if (this.specialKeys.indexOf(event.key) !== -1 || (event.key === 'a' && event.ctrlKey === true) || (event.key === 'c' && event.ctrlKey === true) || (event.key === 'v' && event.ctrlKey === true) || (event.key === 'x' && event.ctrlKey === true)) {
-            return;
-        }
-        let current: string = this.el.nativeElement.value;
-        let next: string = current.concat(event.key);
-        if (next && !String(next).match(this.regex)) {
-            event.preventDefault();
-        }
+    let current: string = this.el.nativeElement.value;
+    let next: string = current.concat(event.key);
+    if (next && !String(next).match(this.regex)) {
+      event.preventDefault();
     }
-    @HostListener('paste', ['$event'])
-    onPaste(event: ClipboardEvent) {
-      let dataToPaste = event.clipboardData.getData('text');
-      let current: string = this.el.nativeElement.value;
-      let next: string = current.concat(dataToPaste);
-      if (next && !String(next).match(this.regex)) {
+  }
+
+  /* Copy paste action */
+  @HostListener('paste', ['$event'])
+  onPaste(event: any) {
+    const clipboardData = (event.originalEvent || event).clipboardData.getData("text/plain");
+    if (clipboardData) {
+      if (!this.regex.test(clipboardData)) {
         event.preventDefault();
       }
-  
     }
+    return
+  }
 }

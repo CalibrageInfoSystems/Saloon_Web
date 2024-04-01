@@ -4,7 +4,7 @@
       <div class="card mt-5">
         <div class="card-body">
           <a href="javascript:" class="d-flex justify-content-center mt-3">
-            <img src="assets/images/logo.svg"  width="150" class="pe-0" />
+            <img src="assets/images/logo-round.png"  width="150" class="pe-0" />
           </a>
           <div class="row">
             <div class="d-flex justify-content-center">
@@ -21,37 +21,96 @@
             <span>or</span>
           </div> -->
           <h5 class="my-4 d-flex justify-content-center"> Sign Up with Email address </h5>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Enter First Name" />
-                <label for="floatingInput">First Name</label>
+          <form class="pt-3" [formGroup]="registerForm" autocomplete="off">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" formControlName="firstName" maxlength="50" placeholder="Enter First Name"
+                    [ngClass]="{'is-valid': submitted && registerForm.get('firstName').valid,'is-invalid' : submitted && !registerForm.get('firstName').valid}" />
+                  <label for="floatingInput">First Name</label>
+                  <div *ngIf="submitted && registerForm.get('firstName').errors && registerForm.get('firstName').errors?.['required']"
+                    class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="First Name is required">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" formControlName="middleName" maxlength="50" placeholder="Enter Middle Name" />
+                  <label for="floatingInput">Middle Name</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" formControlName="lastName" maxlength="50" placeholder="Enter Last Name"
+                    [ngClass]="{'is-valid': submitted && registerForm.get('firstName').valid,'is-invalid' : submitted && !registerForm.get('firstName').valid}" />
+                  <label for="floatingInput">Last Name</label>
+                  <div *ngIf="submitted && registerForm.get('lastName').errors && registerForm.get('lastName').errors?.['required']"
+                    class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Last Name is required">
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Enter Last Name" />
-                <label for="floatingInput">Last Name</label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input numberOnly class="form-control" id="floatingInput" formControlName="mobileNo" maxlength="10" placeholder="Enter Mobile Number"
+                    [ngClass]="{'is-valid': submitted && registerForm.get('firstName').valid,'is-invalid' : submitted && !registerForm.get('firstName').valid}" />
+                  <label for="floatingInput">Mobile Number</label>
+                  <div *ngIf="submitted && registerForm.get('mobileNo').errors && registerForm.get('mobileNo').errors?.['required']"
+                    class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start"
+                    ngbTooltip="Mobile Number is required">
+                  </div>
+                  <div class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Mobile Number is not valid"
+                    *ngIf="submitted  && registerForm.get('mobileNo').errors && registerForm.get('mobileNo').errors?.['pattern']">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input numberOnly class="form-control" id="floatingInput" formControlName="contactNo" maxlength="10" placeholder="Enter Contact Number" />
+                  <label for="floatingInput">Contact Number</label>
+                  <div class="error-icon-hover" tooltipClass="invalid-tooltip-msg" placement="start" ngbTooltip="Contact Number is not valid"
+                    *ngIf="submitted  && registerForm.get('contactNo').errors && registerForm.get('contactNo').errors?.['pattern']">
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
-            <label for="floatingInput">Email Address / Username</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="Enter Password" />
-            <label for="floatingInput">Password</label>
-          </div>
-          <div class="form-check mt-3s">
-            <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
-            <label class="form-check-label" for="customCheckc1">
-              <h5>Agree with <span>Terms & Condition.</span></h5>
-            </label>
-          </div>
-          <div class="d-grid mt-4">
-            <button type="button" class="btn btn-secondary p-2">Sign Up</button>
-          </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+              <label for="floatingInput">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
+              <label for="floatingInput">Email Address / Username</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input [type]="showPassword[0]?'text':'password'" class="form-control" id="floatingInput"
+                placeholder="Enter Password" />
+              <label for="floatingInput">Password</label>
+              <span class="password-eye pwd-notshow pos-rit" *ngIf="showPassword[0]" (click)="showPasswordHandler(0)"><i
+                  class="pi pi-eye" aria-hidden="true"></i></span>
+              <span class="password-eye pwd-show pos-rit" *ngIf="!showPassword[0]" (click)="showPasswordHandler(0)"><i
+                  class="pi pi-eye-slash" aria-hidden="true"></i></span>
+            </div>
+            <div class="form-floating mb-3">
+              <input [type]="showPassword[1]?'text':'password'" class="form-control" id="floatingInput"
+                placeholder="Enter Confirm Password" />
+              <label for="floatingInput">Confirm Password</label>
+              <span class="password-eye pwd-notshow pos-rit" *ngIf="showPassword[1]" (click)="showPasswordHandler(1)"><i
+                  class="pi pi-eye" aria-hidden="true"></i></span>
+              <span class="password-eye pwd-show pos-rit" *ngIf="!showPassword[1]" (click)="showPasswordHandler(1)"><i
+                  class="pi pi-eye-slash" aria-hidden="true"></i></span>
+            </div>
+            <!-- <div class="form-check mt-3s">
+                      <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+                      <label class="form-check-label" for="customCheckc1">
+                        <h5>Agree with <span>Terms & Condition.</span></h5>
+                      </label>
+                    </div> -->
+            <div class="d-grid mt-4">
+              <button type="button" class="btn btn-secondary p-2" (click)="onSignIn()">Sign Up</button>
+            </div>
+          </form>
           <hr />
           <h5 class="d-flex justify-content-center">
             <a [routerLink]="['/auth/login']"> Already have an account? </a>
