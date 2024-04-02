@@ -29,7 +29,7 @@ export class CommonAPIService {
     }
   }
   commonApiCallforAlert(url, methodType, requestObj, callBack) {
-  
+
     // console.log(url);
     this.apiHandler(methodType, url, requestObj).subscribe(
       (res) => {
@@ -58,26 +58,28 @@ export class CommonAPIService {
     // common Post Api need to use in all screens
 
   commonApiCall(url, methodType, requestObj, callBack) {
-  
     this.spinner.show();
     // console.log(url);
     this.apiHandler(methodType, url, requestObj).subscribe(
       (res) => {
         if (
           !this.apiService.checkNullOrUndefined(res) &&
-          res.hasOwnProperty('response')
+          res.hasOwnProperty('ListResult')
         ) {
-          if (res.hasOwnProperty('isSuccess') && res.isSuccess) {
+          if (res.hasOwnProperty('IsSuccess') && res.IsSuccess) {
             if (methodType != HttpMethod.GET) {
               this.getMessages(res, AlertInfo.SUCCESS);
             }
             this.spinner.hide();
-            callBack(res.response, true);
-          } else if (res.hasOwnProperty('isSuccess') && !res.isSuccess) {
+            callBack(res.ListResult, true);
+          } else if (res.hasOwnProperty('IsSuccess') && !res.IsSuccess) {
             this.getMessages(res, AlertInfo.WARNING);
             this.spinner.hide();
-            callBack(res.response, false);
+            callBack(res.ListResult, false);
           }
+        }
+        else if (res.StatusMessage) {
+          callBack(res.StatusMessage, true);
         }
         this.spinner.hide();
       },
@@ -91,10 +93,10 @@ export class CommonAPIService {
 
   private getMessages(res: any, type) {
     if (
-      !this.apiService.checkNullOrUndefined(res.endUserMessage) &&
-      res.endUserMessage != ''
+      !this.apiService.checkNullOrUndefined(res.EndUserMessage) &&
+      res.EndUserMessage != ''
     ) {
-      this.alertService.showMessage(type, res.endUserMessage);
+      this.alertService.showMessage(type, res.EndUserMessage);
     }
   }
 }

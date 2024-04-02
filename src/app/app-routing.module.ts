@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'users',
         loadComponent: () => import('./demo/main/components/security/users/users.component'),
-        canActivate: [authGuard],
+        // canActivate: [authGuard],
         data: {
           title: "Users",
           activityRights: [
@@ -31,7 +31,7 @@ const routes: Routes = [
       {
         path: 'roles',
         loadComponent: () => import('./demo/main/components/security/roles/roles.component'),
-        canActivate: [authGuard],
+        // canActivate: [authGuard],
         data: {
           title: "Roles",
           activityRights: [

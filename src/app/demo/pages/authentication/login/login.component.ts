@@ -46,22 +46,21 @@ export default class LoginComponent {
     }
 
     const obj = {
-      username:  this.loginForm.value.email,
-      password:this.loginForm.value.password,
-      companyId:this.loginForm.value.companyId,
+      UserName:  this.loginForm.value.email,
+      Password:this.loginForm.value.password,
     };
 
     let url=USER_ACCOUNT.login;
     this.commonService.commonApiCall(
       url,
-      HttpMethod.LOGIN_POST,
+      HttpMethod.POST,
       obj, (result, statusFlag) => {
         if (statusFlag) {
           if (result) {
             this.submitted=false;
             this.appService.setUserDetails(result);
             // var obj2 = {companyId:this.loginForm.value.companyId}
-            this.appService.setCompanyDetails(this.loginForm.value.companyId);
+            // this.appService.setCompanyDetails(this.loginForm.value.companyId);
             this.router.navigate(['/default']);
           }
         }

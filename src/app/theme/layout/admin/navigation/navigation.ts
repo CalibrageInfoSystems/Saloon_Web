@@ -41,14 +41,14 @@ const NavigationItems = [
     title: 'Security',
     type: 'group',
     icon: 'icon-navigation',
-    permissions:[Permission.CAN_VIEW_USERS,Permission.CAN_VIEW_ROLES],
+    // permissions:[Permission.CAN_VIEW_USERS,Permission.CAN_VIEW_ROLES],
     children: [
       {
         id: 'security-list',
         title: 'Security List',
         type: 'collapse',
         icon: 'ti ti-shield-lock',
-        permissions:[Permission.CAN_VIEW_USERS,Permission.CAN_VIEW_ROLES],
+        // permissions:[Permission.CAN_VIEW_USERS,Permission.CAN_VIEW_ROLES],
         children: [
           {
             id: 'users-list',
@@ -56,7 +56,7 @@ const NavigationItems = [
             type: 'item',
             url: '/users',
             icon: 'ti ti-users',
-            permissions:[Permission.CAN_VIEW_USERS]
+            // permissions:[Permission.CAN_VIEW_USERS]
           },
           {
             id: 'roles-list',
@@ -64,7 +64,7 @@ const NavigationItems = [
             type: 'item',
             url: '/roles',
             icon: 'ti ti-layers-intersect',
-            permissions:[Permission.CAN_VIEW_ROLES]
+            // permissions:[Permission.CAN_VIEW_ROLES]
           }
         ]
       }

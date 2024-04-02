@@ -1,15 +1,15 @@
 import { environment } from "src/environments/environment";
 
-let url = environment.baseUrl + '/api/';
+let url = environment.baseUrl; /* + '/Api/' */
 // let url = '/api/';
 export const USER_ACCOUNT = {
     //Login
-    login: url + 'Account/Login',
-    getUsers:url+'Account/GetUsers/',
+    login: url + '/ValidateUserData',
+    getUsers:url+'/GetUserData?id=/',
     getRoles:url+'Account/GetAllRoles/',
     activeUsersList:url+'Account/GetActiveUsers/',
-    addUser:url+'Account/AddUser/',
-    updateUser:url+'Account/UpdateUser',
+    addUser:url+'/Register',
+    updateUser:url+'/UpdateUser',
     userDelete:url+'Account/DeleteUserById',
     userForgotPassword:url+'Account/ForgotPassword',
     userResetPassword:url+'Account/ResetPassword',
